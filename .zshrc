@@ -1,6 +1,9 @@
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+source /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /root/.oh-my-zsh/custom/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source /root/.oh-my-zsh/custom/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
-
+#plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
 # NVM lazy load
 if [ -s "$HOME/.nvm/nvm.sh" ]; then
   [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
@@ -17,7 +20,6 @@ fix_wsl2_interop() {
         fi
     done
 }
-
 # Default Editor
 # ---
 #
@@ -33,15 +35,16 @@ alias tf="terraform"
 alias a="ansible"
 alias ap="ansible-playbook"
 alias dt="datree"
+alias hist="history 1"
 
 # mac OS shortcuts
 alias code="open -a 'Visual Studio Code'"
 
 kn() {
     if [ "$1" != "" ]; then
-            kubectl config set-context --current --namespace=$1
+	    kubectl config set-context --current --namespace=$1
     else
-            echo -e "\e[1;31m Error, please provide a valid Namespace\e[0m"
+	    echo -e "\e[1;31m Error, please provide a valid Namespace\e[0m"
     fi
 }
 
@@ -105,6 +108,17 @@ case $_distro in
 esac
 
 export STARSHIP_DISTRO="$ICON"
+
+SAVEHIST=10000
+HISTSIZE=10000
+#HISTFILESIZE=10000
+HISTFILE=~/.zsh_history
+setopt appendhistory
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt INC_APPEND_HISTORY
+export HISTTIMEFORMAT="[%F %T] "
 
 # Load Starship
 eval "$(starship init zsh)"
