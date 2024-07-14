@@ -20,4 +20,4 @@ git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$Z
 
 chsh -s $(which zsh) #make zsh main shell 
 
-source "~/.zshrc"
+source ~/.zshrc
