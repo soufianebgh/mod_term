@@ -2,7 +2,7 @@
 
 ZSH_CUSTOM=~/.oh-my-zsh/custom/plugins
 
-sudo apt update && sudo apt install zsh && sudo apt install curl -y
+sudo apt update && sudo apt install zsh && sudo apt install curl && apt install exa -y
 
 curl -sS https://starship.rs/install.sh | sh
 echo 'eval "$(starship init bash)"' >> ~/.bashrc
