@@ -27,7 +27,16 @@ echo 'eval "$(starship init bash)"' >> ~/.bashrc
 
 mkdir -p ~/.config
 cp ./starship.toml ~/.config/ 
-cp ./.zshrc ~/
+
+#in case of zsh already present 
+if [ -f ~/.zshrc ]; then
+        temp_file=$(mktemp)
+        grep -Fxv -f ~/.zshrc ./.zshrc > "$temp_file"
+        cat "$temp_file" >> ~/.zshrc
+        rm "$temp_file"
+else
+        cp ./.zshrc ~/
+fi
 
 mkdir -p "$ZSH_CUSTOM"
 
