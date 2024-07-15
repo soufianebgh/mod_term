@@ -23,8 +23,8 @@ fix_wsl2_interop() {
 # Default Editor
 # ---
 #
-export EDITOR=hx
-export KUBE_EDITOR=hx
+export EDITOR=vi
+export KUBE_EDITOR=vi
 
 # Alias
 # ---
