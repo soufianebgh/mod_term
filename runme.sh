@@ -13,9 +13,9 @@ else
 fi
 
 if [ "$DISTRO" = "debian" ]; then
-        sudo apt update
+        sudo apt update -y
         sudo apt install -y zsh curl exa 
-elif [ "$DISTRO" = "centos" ]; then
+elif [ "$DISTRO" = "redhat" ]; then
         sudo yum update -y
         sudo yum install -y zsh curl exa 
  elif [ "$DISTRO" = "arch" ]; then
@@ -39,3 +39,5 @@ git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$Z
 chsh -s $(which zsh) #make zsh main shell 
 
 source ~/.zshrc
+
+echo "Zsh installled and correctly configured. You have to reopen the shell to see the changes."
