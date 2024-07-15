@@ -2,12 +2,13 @@
 
 ZSH_CUSTOM=~/.oh-my-zsh/custom/plugins
 
-if [ -f /etc/debian_version ]; then
+if command -v apt &> /dev/null; then
     DISTRO="debian"
-elif [ -f /etc/redhat-release ]; then
-    DISTRO="centos"
+elif command -v yum &> /dev/null; then
+    DISTRO="redhat"
+elif command -v pacman &> /dev/null; then
+    DISTRO="arch"
 else
-    echo "Distribution non prise en charge."
     exit 1
 fi
 
@@ -17,7 +18,9 @@ if [ "$DISTRO" = "debian" ]; then
 elif [ "$DISTRO" = "centos" ]; then
         sudo yum update -y
         sudo yum install -y zsh curl exa 
- fi
+ elif [ "$DISTRO" = "arch" ]; then
+        sudo pacman -Syu --noconfirm zsh curl exa
+fi
 
 curl -sS https://starship.rs/install.sh | sh
 echo 'eval "$(starship init bash)"' >> ~/.bashrc
