@@ -2,7 +2,23 @@
 
 ZSH_CUSTOM=~/.oh-my-zsh/custom/plugins
 
-sudo apt update && sudo apt install zsh && sudo apt install curl && sudo apt install exa -y
+if [ -f /etc/debian_version ]; then
+    DISTRO="debian"
+elif [ -f /etc/redhat-release ]; then
+    DISTRO="centos"
+else
+    echo "Distribution non prise en charge."
+    exit 1
+fi
+
+if [ "$DISTRO" = "debian" ]; then
+        sudo apt update
+        sudo apt install -y zsh curl exa git
+    elif [ "$DISTRO" = "centos" ]; then
+        sudo yum update -y
+        sudo yum install -y zsh curl exa git
+    fi
+}
 
 curl -sS https://starship.rs/install.sh | sh
 echo 'eval "$(starship init bash)"' >> ~/.bashrc
