@@ -13,10 +13,10 @@ fi
 
 if [ "$DISTRO" = "debian" ]; then
         sudo apt update
-        sudo apt install -y zsh curl exa git
+        sudo apt install -y zsh curl exa 
     elif [ "$DISTRO" = "centos" ]; then
         sudo yum update -y
-        sudo yum install -y zsh curl exa git
+        sudo yum install -y zsh curl exa 
     fi
 }
 
