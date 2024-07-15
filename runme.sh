@@ -13,13 +13,13 @@ else
 fi
 
 if [ "$DISTRO" = "debian" ]; then
-        sudo apt update -y
-        sudo apt install -y zsh curl exa 
+    sudo apt update -y
+    sudo apt install -y zsh curl exa 
 elif [ "$DISTRO" = "redhat" ]; then
-        sudo yum update -y
-        sudo yum install -y zsh curl exa 
+    sudo yum update -y
+    sudo yum install -y zsh curl exa 
  elif [ "$DISTRO" = "arch" ]; then
-        sudo pacman -Syu --noconfirm zsh curl exa
+    sudo pacman -Syu --noconfirm zsh curl exa
 fi
 
 curl -sS https://starship.rs/install.sh | sh
@@ -30,12 +30,14 @@ cp ./starship.toml ~/.config/
 
 #in case of zsh already present 
 if [ -f ~/.zshrc ]; then
-        temp_file=$(mktemp)
-        grep -Fxv -f ~/.zshrc ./.zshrc > "$temp_file"
-        cat "$temp_file" >> ~/.zshrc
-        rm "$temp_file"
+    cp ~/.zshrc ~/.zshrc.bak
+    while IFS= read -r line; do
+        if ! grep -Fxq "$line" ~/.zshrc; then
+            echo "$line" >> ~/.zshrc
+        fi
+    done < ./.zshrc
 else
-        cp ./.zshrc ~/
+    cp ./.zshrc ~/
 fi
 
 mkdir -p "$ZSH_CUSTOM"
