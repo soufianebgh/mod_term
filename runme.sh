@@ -31,14 +31,8 @@ cp ./starship.toml ~/.config/
 #in case of zsh already present 
 if [ -f ~/.zshrc ]; then
     cp ~/.zshrc ~/.zshrc.bak
-    while IFS= read -r line; do
-        if ! grep -Fxq "$line" ~/.zshrc; then
-            echo "$line" >> ~/.zshrc
-        fi
-    done < ./.zshrc
-else
-    cp ./.zshrc ~/
 fi
+cp ./.zshrc ~/
 
 mkdir -p "$ZSH_CUSTOM"
 
