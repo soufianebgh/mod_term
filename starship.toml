@@ -27,7 +27,7 @@ force_display = false
 format = 'on [$symbol($subscription)]($style) '
 symbol = 'ﴃ '
 style = 'blue bold'
-disabled = true
+disabled = false
 
 [battery]
 full_symbol = ' '
@@ -336,7 +336,7 @@ style = 'green bold'
 only_detached = true
 disabled = false
 tag_symbol = ' 🏷  '
-tag_disabled = true
+tag_disabled = false
 tag_max_candidates = 0
 
 [git_metrics]
@@ -344,7 +344,7 @@ added_style = 'bold green'
 deleted_style = 'bold red'
 only_nonzero_diffs = true
 format = '([+$added]($added_style) )([-$deleted]($deleted_style) )'
-disabled = true
+disabled = false
 
 [git_state]
 rebase = 'REBASING'
@@ -429,7 +429,7 @@ style = 'bold purple'
 format = 'on [$symbol$branch]($style) '
 truncation_length = 9223372036854775807
 truncation_symbol = '…'
-disabled = true
+disabled = false
 
 [hostname]
 ssh_only = true
@@ -522,7 +522,7 @@ disabled = false
 ssh_only = true
 format = '[$localipv4]($style) '
 style = 'yellow bold'
-disabled = true
+disabled = false
 
 [lua]
 format = 'via [$symbol($version )]($style)'
@@ -540,7 +540,7 @@ threshold = 75
 format = 'via $symbol[$ram( | $swap)]($style) '
 style = 'white bold dimmed'
 symbol = '🐏 '
-disabled = true
+disabled = false
 
 [meson]
 truncation_length = 4294967295
@@ -812,7 +812,7 @@ xonsh_indicator = 'xsh'
 cmd_indicator = 'cmd'
 unknown_indicator = ''
 style = 'white bold'
-disabled = true
+disabled = false
 
 [shlvl]
 threshold = 2
@@ -820,7 +820,7 @@ format = '[$symbol$shlvl]($style) '
 symbol = '↕️  '
 repeat = false
 style = 'bold yellow'
-disabled = true
+disabled = false
 
 [singularity]
 symbol = ''
@@ -849,14 +849,14 @@ recognize_signal_code = true
 pipestatus = false
 pipestatus_separator = '|'
 pipestatus_format = '\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'
-disabled = true
+disabled = false
 
 [sudo]
 format = '[as $symbol]($style)'
 symbol = '🧙 '
 style = 'bold blue'
 allow_windows = false
-disabled = true
+disabled = false
 
 [swift]
 format = 'via [$symbol($version )]($style)'
