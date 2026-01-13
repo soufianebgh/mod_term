@@ -1,7 +1,7 @@
 name: Deploy Terminal Config
 on:
   push:
-    branches: [ main ]
+    branches: [ update_conf ]
 
 jobs:
   deploy:
@@ -11,10 +11,13 @@ jobs:
       uses: actions/checkout@v4
 
     - name: inventory configuration
+      env:
+        INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
+        ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
       run: |
-        cat <<EOF > ansible/hosts.ini
-        ${{ secrets.ANSIBLE_INVENTORY }}
-        EOF
+        echo "$INVENTORY" > ansible/hosts.ini
+        echo "::add-mask::$INVENTORY"
+        echo "::add-mask::$ANSIBLE_BECOME_PASS"
 
     - name: syntax verif
       run: |
@@ -23,26 +26,26 @@ jobs:
     #- name: Dry-run Bootstrap
     #  run: |
     #    ansible-playbook -i ansible/hosts.ini ansible/start.yml --check \
-    #    --extra-vars "ansible_become_pass=${{ secrets.ANSIBLE_SUDO_PASS }}"
+    #    --extra-vars "ansible_become_pass=${{ secrets.ANSIBLE_BECOME_PASS }}"
     #
     #- name: dry-run
     #  env:
-    #    SUDO_PASS: ${{ secrets.ANSIBLE_SUDO_PASS }}
+    #    ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
     #  run: |
     #    ansible-playbook -i ansible/hosts.ini ansible/setup_term.yml \
-    #    --extra-vars "ansible_become_pass=$SUDO_PASS" \
+    #    --extra-vars "ansible_become_pass=$ANSIBLE_BECOME_PASS" \
     #    --check
 
     - name: Run Bootstrap (Root)
       env:
-        SUDO_PASS: ${{ secrets.ANSIBLE_SUDO_PASS }}
+        ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
       run: |
         ansible-playbook -i ansible/hosts.ini ansible/start.yml \
-        --extra-vars "ansible_become_pass=$SUDO_PASS"
+        --extra-vars "ansible_become_pass=$ANSIBLE_BECOME_PASS"
 
     - name: execute ansible-playbook
       env:
-        SUDO_PASS: ${{ secrets.ANSIBLE_SUDO_PASS }}
+        ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
       run: |
         ansible-playbook -i ansible/hosts.ini ansible/setup_term.yml \
-        --extra-vars "ansible_become_pass=$SUDO_PASS"
+        --extra-vars "ansible_become_pass=$ANSIBLE_BECOME_PASS"
