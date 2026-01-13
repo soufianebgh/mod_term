@@ -1,0 +1,13 @@
+---
+- name: "terminal conf"
+  hosts: all_vms
+  become: yes
+  vars:
+    # user defined in hosts.ini
+    target_user: "{{ admin_user }}"
+
+  tasks:
+  - name: "apply zsh conf"
+    include_tasks: tasks_per_user.yml
+    vars:
+      current_user: "{{ target_user }}"

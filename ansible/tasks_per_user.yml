@@ -1,0 +1,49 @@
+- name: "check {{ current_user }} exist"
+  getent:
+    database: passwd
+    key: "{{ current_user }}"
+  ignore_errors: yes
+  register: user_check
+
+- name: "Install for {{ current_user }}"
+  when: user_check.failed is false
+  block:
+  - name: "clone omz"
+    git:
+      repo: https://github.com/ohmyzsh/ohmyzsh.git
+      dest: "/home/{{ current_user }}/.oh-my-zsh"
+    become_user: "{{ current_user }}"
+
+  - name: "dl zsh plugins"
+    git:
+      repo: "{{ item.repo }}"
+      dest: "/home/{{ current_user }}/.oh-my-zsh/custom/plugins/{{ item.name }}"
+    loop:
+    - { name: 'fast-syntax-highlighting', repo: 'https://github.com/zdharma-continuum/fast-syntax-highlighting.git' }
+    - { name: 'zsh-autocomplete', repo: 'https://github.com/marlonrichert/zsh-autocomplete.git' }
+    - { name: 'zsh-autosuggestions', repo: 'https://github.com/zsh-users/zsh-autosuggestions.git' }
+    become_user: "{{ current_user }}"
+
+  - name: "deploy .zshrc"
+    copy:
+      src: ../files/.zshrc
+      dest: "/home/{{ current_user }}/.zshrc"
+      owner: "{{ current_user }}"
+      mode: '0644'
+
+  - name: "deploy starship"
+    block:
+    - file:
+        path: "/home/{{ current_user }}/.config"
+        state: directory
+        owner: "{{ current_user }}"
+    - copy:
+        src: ../files/starship.toml
+        dest: "/home/{{ current_user }}/.config/starship.toml"
+        owner: "{{ current_user }}"
+
+  - name: "swap shell {{ current_user }}"
+    user:
+      name: "{{ current_user }}"
+      shell: /bin/zsh
+    become: yes

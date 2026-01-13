@@ -1,0 +1,6 @@
+hosts.ini
+*.retry
+.vault_pass
+*.log
+__pycache__/
+*.pyc
