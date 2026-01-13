@@ -1,7 +1,7 @@
 name: Deploy Terminal Config
 on:
   push:
-    branches: [ update_conf ]
+    branches: [ main ]
 
 jobs:
   deploy:
