@@ -1,4 +1,7 @@
 ---
+- name: "installation"
+  include_tasks: ../ansible/install_tasks.yml
+
 - name: "start terminal configuration"
   include_tasks: ../ansible/tasks_per_user.yml
   vars:

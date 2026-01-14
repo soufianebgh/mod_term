@@ -3,29 +3,4 @@
   hosts: all_vms
   become: yes
   tasks:
-  - name: "packages install"
-    apt:
-      name:
-      - acl # mgt users
-      - zsh
-      - git
-      - curl #to install starship
-      state: present
-      update_cache: yes
-
-  - name: "Install Starship binary"
-    shell: "curl -sS https://starship.rs/install.sh | sh -s -- -y"
-    args:
-      creates: /usr/local/bin/starship # avoid reinstall
-
-  - name: "Install eza (in place of exa)"
-    apt:
-      name: eza
-      state: present
-    ignore_errors: yes # if not present
-
-  - name: "install exa if available"
-    apt:
-      name: exa
-      state: present
-    ignore_errors: yes
+  - import_tasks: install_tasks.yml

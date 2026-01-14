@@ -1,0 +1,18 @@
+---
+- name: "packages install"
+  apt:
+    name: [ acl, zsh, git, curl ]
+    state: present
+    update_cache: yes
+
+- name: "Install Starship binary"
+  shell: "curl -sS https://starship.rs/install.sh | sh -s -- -y"
+  args:
+    creates: /usr/local/bin/starship
+
+- name: "Install eza/exa"
+  apt:
+    name: "{{ item }}"
+    state: present
+  ignore_errors: yes
+  loop: [ eza, exa ]
