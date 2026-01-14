@@ -1,0 +1,5 @@
+---
+- name: "start terminal configuration"
+  include_tasks: ../ansible/tasks_per_user.yml
+  vars:
+    current_user: "{{ term_user | default(ansible_user_id) }}"
