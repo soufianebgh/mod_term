@@ -117,7 +117,7 @@ esac
 
 export STARSHIP_DISTRO="$ICON "
 
-ISTFILE="$HOME/.zsh_history"
+HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 
