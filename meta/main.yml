@@ -3,6 +3,9 @@ galaxy_info:
   description: zsh terminal
   license: MIT
   min_ansible_version: '2.9'
+  galaxy_tags:
+  - system
+  - terminal
   platforms:
   - name: Debian
     versions:
