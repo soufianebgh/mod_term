@@ -5,19 +5,38 @@
   ignore_errors: yes
   register: user_check
 
+- name: Resolve target user
+  ansible.builtin.set_fact:
+    current_user: "{{ term_user | default(ansible_user_id) }}"
+
+- name: Get passwd entry for target user
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ current_user }}"
+  register: term_passwd
+  failed_when: false
+
+- name: Compute target home with safe fallback
+  ansible.builtin.set_fact:
+    term_home: >-
+      {{
+        (term_passwd.ansible_facts.getent_passwd[current_user][4])
+        | default('/home/' ~ current_user)
+      }}
+
 - name: "Install for {{ current_user }}"
   when: user_check.failed is false
   block:
   - name: "clone omz"
     git:
       repo: https://github.com/ohmyzsh/ohmyzsh.git
-      dest: "/home/{{ current_user }}/.oh-my-zsh"
+      dest: "{{ term_home }}/.oh-my-zsh"
     become_user: "{{ current_user }}"
 
   - name: "dl zsh plugins"
     git:
       repo: "{{ item.repo }}"
-      dest: "/home/{{ current_user }}/.oh-my-zsh/custom/plugins/{{ item.name }}"
+      dest: "{{ term_home }}/.oh-my-zsh/custom/plugins/{{ item.name }}"
     loop:
     - { name: 'fast-syntax-highlighting', repo: 'https://github.com/zdharma-continuum/fast-syntax-highlighting.git' }
     - { name: 'zsh-autocomplete', repo: 'https://github.com/marlonrichert/zsh-autocomplete.git' }
@@ -27,19 +46,19 @@
   - name: "deploy .zshrc"
     copy:
       src: ../files/.zshrc
-      dest: "/home/{{ current_user }}/.zshrc"
+      dest: "{{ term_home }}/.zshrc"
       owner: "{{ current_user }}"
       mode: '0644'
 
   - name: "deploy starship"
     block:
     - file:
-        path: "/home/{{ current_user }}/.config"
+        path: "{{ term_home }}/.config"
         state: directory
         owner: "{{ current_user }}"
     - copy:
         src: ../files/starship.toml
-        dest: "/home/{{ current_user }}/.config/starship.toml"
+        dest: "{{ term_home }}/.config/starship.toml"
         owner: "{{ current_user }}"
 
   - name: "swap shell {{ current_user }}"

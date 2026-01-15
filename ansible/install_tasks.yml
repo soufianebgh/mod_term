@@ -1,4 +1,9 @@
 ---
+- name: Check supported OS
+  ansible.builtin.fail:
+    msg: "mod_term currently supports Debian/Ubuntu (ansible_os_family=Debian) only."
+  when: ansible_os_family != "Debian"
+
 - name: "packages install"
   apt:
     name: [ acl, zsh, git, curl ]

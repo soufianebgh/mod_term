@@ -1,0 +1,53 @@
+name: Deploy Terminal Config
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: inventory configuration
+      env:
+        INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
+        ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
+      run: |
+        echo "$INVENTORY" > ansible/hosts.ini
+        echo "::add-mask::$INVENTORY"
+        echo "::add-mask::$ANSIBLE_BECOME_PASS"
+
+    - name: syntax verif
+      run: |
+        ansible-playbook -i ansible/hosts.ini ansible/setup_term.yml --syntax-check
+
+    #- name: Dry-run Bootstrap
+    #  run: |
+    #    ansible-playbook -i ansible/hosts.ini ansible/start.yml --check \
+    #    --extra-vars "ansible_become_pass=${{ secrets.ANSIBLE_BECOME_PASS }}"
+    #
+    #- name: dry-run
+    #  env:
+    #    ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
+    #  run: |
+    #    ansible-playbook -i ansible/hosts.ini ansible/setup_term.yml \
+    #    --extra-vars "ansible_become_pass=$ANSIBLE_BECOME_PASS" \
+    #    --check
+
+    - name: Run Bootstrap (Root)
+      env:
+        ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
+      run: |
+        ansible-playbook -i ansible/hosts.ini ansible/start.yml \
+        --extra-vars "ansible_become_pass=$ANSIBLE_BECOME_PASS"
+
+    - name: execute ansible-playbook
+      env:
+        ANSIBLE_BECOME_PASS: ${{ secrets.ANSIBLE_BECOME_PASS }}
+      run: |
+        ansible-playbook -i ansible/hosts.ini ansible/setup_term.yml \
+        --extra-vars "ansible_become_pass=$ANSIBLE_BECOME_PASS"
